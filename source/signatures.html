@@ -157,89 +157,46 @@ identifiers or the certificate ID itself can be registered as identifiers (usual
 but this also requires administrative overhead.
 </p>
 
-<a name="canonicalization"></a>
+<a name="canonicalization"></a>  
 <h2>Canonicalization</h2>
-<p>
-A consistent representation of resources in their wire formats (JSON and XML) is required to 
-make signatures interoperable; this is called 'Canonicalizing' resources. Because of the complexities around the interplay between 
-data exchange and human-level signatures, FHIR defines a number of ways of canonicalizing resources
-that are suitable for different purposes. 
-</p>
-<p>
-The canonicalization methods SHOULD be represented in the <code>Signature.targetFormat</code> element, as shown 
-here:
-</p>
-<pre class="json">
-{
-  "resourceType": "Signature",
-  "targetFormat": "application/fhir+json;canonicalization=http://hl7.org/fhir/canonicalization/json"
-}
-</pre>
+<p>A consistent representation of resources in their wire formats (JSON and XML) is required to make signatures interoperable; this is called 'Canonicalizing' resources. Because of the complexities of the interplay between data exchange and human-level signatures, FHIR defines several ways to canonicalize resources, each suitable for different purposes and identified by a URI.  The canonicalization method URI <strong>SHOULD</strong> be represented in the <code>Signature.targetFormat</code> to communicate the method used.  Canonical methods for JSON, JSON-XML, and XML and their variants are defined in the following sections.</p>
 
 <a name="json"></a>
 <h3>JSON</h3>
-<p>
-This specification defines the following method for canonicalizing FHIR resources, when represented as JSON. 
-</p>
-<p>
-When JSON resources are canonicalized, they SHALL be canonicalized in accordance with the 
-<a href="https://www.rfc-editor.org/rfc/rfc8785">JSON Canonicalization Scheme defined in RFC 8785</a>. 
-</p>
-<p>
-This canonicalization method is identified by the URI <code>http://hl7.org/fhir/canonicalization/json</code>. 
-</p>
-<p>
-When a provenance has multiple targets resources that are signed, the resources are placed in a JSON Array
-preserving the <code>Provenance.target</code> order which itself is canonicalized according to the rules of RFC 8785.
-</p>
+<p>When JSON resources are canonicalized, they SHALL be canonicalized in accordance with the <a href="#">JSON Canonicalization Scheme defined in RFC 8785</a>.</p>
+<p>In addition, the following rules and guidelines apply:</p>
+<ul>
+<li>When a provenance has multiple target resources that are signed, the resources are placed in a JSON Array preserving the Provenance.target order, which itself is canonicalized according to the rules of RFC 8785.</li>
+<li>If the resource is represented as XML at some point in the life cycle between signing and verification, see the JSON-XML canonicalization method below.</li>
+</ul>
+<p>The base JSON canonicalization method canonicalized the entire resource and is identified by the URI <code>http://hl7.org/fhir/canonicalization/json</code>.</p>
+<p>Additional canonicalizations that include and exclude parts of the resource are defined below.</p>
 
 <a name="json-xml"></a>
 <h3>JSON-XML (XML Safe JSON Canonicalization)</h3>
-<p>
-The simple JSON Canonicalization defined above has a potentially serious limitation: it does not
-allow for the reconstruction of a standard payload for signature verification if (and only if) the 
-resource is represented as XML at some point in the life cycle between signing and verification.
-This happens because in the XML format, XHTML elements (Resource and Section Narratives) 
-are part of the XML DOM, and whitespace and namespaces may be reorganised without changing the canonical XHTML.
-</p>
-<p>
-However most implementers never use the XML format, and the JSON Canonicalization is sufficient when it is not.
-If XML is in scope (and implementers should note that this is a requirement that might arise retrospectively), 
-then this alternative canonicalization <code>JSON-XML</code> method should be used. The rules for 
-this canonicalization are the same as for the JSON canonicalization, except that:
-</p>
-<ul>
-  <li>Prior to serialization, the content of any xhtml in the narrative SHALL be canonicalized according to the
-XML canonicalization rules defined for XML below.</li>
-</ul>
-<p>
-This canonicalization method is identified by the URI <code>http://hl7.org/fhir/canonicalization/json-xml</code>. 
-</p>
+<p>The simple JSON Canonicalization defined above does not guarantee the reconstruction of a standard payload for signature verification if the resource is represented as XML at some point in the life cycle between signing and verification. This is because, in XML, XHTML elements (i.e., Resource and Section Narratives) are part of the XML DOM, and whitespace and namespaces may be reorganised without changing the canonical XHTML. Therefore, the JSON-XML method is defined. The rules for this canonicalization are the same as for the JSON canonicalization, except that prior to serialization, the content of any xhtml in the narrative SHALL be canonicalized according to the XML canonicalization rules defined for XML below.</p>
+<p>This base JSON-XML canonicalization method is identified by the URI <code>http://hl7.org/fhir/canonicalization/json-xml</code>.</p>
+<p>Additional canonicalizations that include and exclude parts of the resource are defined below.</p>
 
 <a name="xml"></a>
 <h3>XML</h3>
-
 <p>
 This specification defines the following method for canonicalizing FHIR resources, when represented as 
 XML. Resources are canonicalized using XML canonical method <a href="http://www.w3.org/TR/xmldsig-core1/#sec-Canonical">Canonical XML 1.1</a> (<code>http://www.w3.org/2006/12/xml-c14n11</code>).
 In addition, the following rules apply:
 </p>
 <ul>
-  <li>The XHTML <a href="narrative.html">Narrative</a> SHALL be canonicalized following these same rules</li>
-  <li>Whitespace in other primitive values SHALL not be altered (including multiple spaces in markdown)</li>
-  <li>Resources are to contain no whitespace other than as found in attribute values and in the XHTML in the narrative, and single spaces between attributes in XML elements </li>
-  <li>Use default namespaces for the FHIR and XHTML namespaces</li>
-  <li>Omit all comments</li>
-  <li>Include the XML processing instruction <code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</code></li>
-  <li>When sets of resources are signed, each seperate resource is an additional <code>Reference</code> entry in the <code>SignedInfo</code> </li>
+<li>The XHTML Narrative SHALL be canonicalized following these same rules</li>
+<li>Whitespace in other primitive values SHALL not be altered (including multiple spaces in markdown)</li>
+<li>Resources are to contain no whitespace other than as found in attribute values and in the XHTML in the narrative, and single spaces between attributes in XML elements</li>
+<li>Use default namespaces for the FHIR and XHTML namespaces</li>
+<li>Omit all comments</li>
+<li>Include the XML processing instruction &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</li>
+<li>When sets of resources are signed, each resource gets its own <code>Reference</code> element inside the XML Digital Signature's <code>SignedInfo</code> element.</li>
+<li>When a provenance has multiple target resources that are signed, the multiple canonicalized XMLs are contained in the digital signature as separate signed content in the order in which the targets are defined.</li>
 </ul>
-<p>
-This canonicalization method is identified by the URI <code>http://hl7.org/fhir/canonicalization/xml</code>.
-</p>
-<p>
-When a provenance has multiple targets resources that are signed, the multiple canonicalized XMLs are contained in the digital signature as separate signed content in the order 
-in which the targets are defined.
-</p>
+<p>This canonicalization method is identified by the URI <code>http://hl7.org/fhir/canonicalization/xml</code>.</p>
+<p>Additional canonicalizations that include and exclude parts of the resource are defined below.</p>
 
 
 <a name="variants"></a>
@@ -696,4 +653,5 @@ This signature is valid.
 </body>
 
 </html>
+
 
