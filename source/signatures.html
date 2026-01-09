@@ -16,51 +16,34 @@ Outstanding issues:
 <body>
 [%file newnavbar%]
 
-
-
-<h1>Digital Signatures</h1>
+<h1>Signatures</h1>
 <table class="colsn"><tr><td id="wg">Responsible Owner: <a _target="blank" href="[%wg sec%]">[%wgt sec%]</a> Work Group</td><td id="ballot"><a href="versions.html#std-process">Standards Status</a>:<!--!ns!--><a href="versions.html#std-process">Normative</a></td></tr></table>
 
-<p>
-Digital Signatures are needed to prove the authenticity and integrity of health records generally, and specifically
-for FHIR content and to establish the grounds for non-repudiation.
-</p>
-<p>
-FHIR Resources are often parts of Medical Record or are communicated as part of formal Medical Documentation. 
-As such there is sometimes a need to cryptographically bind a signature so that the receiving or consuming actor
-can verify authenticity, integrity, and rely on non-repudiation of the content.
-This functionality is provided through the <a href="datatypes.html#Signature">Signature</a> type found in the
-signature element in the <a href="provenance.html">Provenance</a> Resource.
-The signature can either be an electronic signature (e.g., an image of an ink signature), or a digital signature (cryptographic
-proof that the content has not changed), and in the case of a digital signature, either a JWS signature or an XML Digital Signature.
-</p>
-<p>
-In general, signatures are not used when exchanging information directly between systems,
-as the transport arrangements between systems are expected to provide the necessary assurances of authenticity 
-and integrity. The need for signatures arises when the content is being used across multiple systems, 
-or when the content is stored for later retrieval and users need to verify that has not been changed. 
-In addition, there may be regulatory requirements that require the use of signatures, including 
-signatures that are applied subsequently to the content being created.
-</p>
-<p>
-Due the wide set of choices around the use of electronic and digital signatures, 
-local policy and applicable implementation guides are required to define how signatures
-should be created when authoring FHIR content, and what actions should be taken to 
-establish full verification when checking signatures. This specification 
-defines a common set of actions that will cryptographically verify all conformant signatures, but 
-this is not enough by itself to establish trustworthiness.
-</p>
-<p>
-The goal of the FHIR specification with regard to signatures is two-fold:
-</p>
+<p>FHIR Support signature functionality through the <a href="datatypes.html#Signature">Signature</a> datatype, the signature element is used in <a href="bundle.html">Bundle</a>, <a href="contract.html">Contract</a>, and <a href="provenance.html">Provenance</a>, and in the <a href="https://hl7.org/fhir/extensions/StructureDefinition-questionnaireresponse-signature.html">QuestionnaireResponse Signature</a> extension.</p>
+<h2>Electronic Signatures:</h2>
+<p>Electronic signatures range from simply typing a name or inserting an image of a handwritten signature to applying a digital signature that uses cryptographic proof to show the content has not changed.  All digital signatures are electronic signatures, but not all electronic signatures are digital signatures.  This specification provides the data structures for non-digital signatures but leaves implementation details and verification processes to local policy.  The use of FHIR digital signatures is discussed in the following sections.</p>
+<p>Examples of FHIR non-digital signatures (omitting other Signature datatype fields for brevity):</p>
 <ol>
- <li>Provide implementations with the capabilities needed to enable the set of local policies that are needed</li>
- <li>Make the actual signature verification process fully interoperable</li>
+<li>Hand-typed name</li>
 </ol>
-<p>
-If implementers follow all the conformance points below (both the "SHALL" and the "SHOULD" points), then any FHIR consumer will be able to verify 
-any digital signature.
-</p>
+<ul>
+<li><code>Signature.data</code>: The base64-encoded hand-typed name</li>
+<li><code>Signature.sigFormat</code>: the mime type for the image file (e.g, text/plain)</li>
+</ul>
+<ol start="2">
+<li>Scanned image of handwritten signature</li>
+</ol>
+<ul>
+<li><code>Signature.data</code>: The base64-encoded JPG of the image.</li>
+<li><code>Signature.sigFormat</code>: the mime type for the image file (e.g, image/jpg)</li>
+</ul>
+<ol start="3">
+<li>Checking a box: The “proof” is really the audit trail showing a specific authenticated user clicked a specific checkbox at a specific time.  Therefore, the <code>Signature.type</code>, <code>Signature.who</code>, and <code>Signature.when</code> are the critical elements, and <code>Signature.data</code> and <code>Signature.sigFormat</code> are not used.</li>
+</ol>
+<h2>Digital Signature</h2>
+<p>FHIR Resources are often parts of a Medical Record or are communicated as part of formal Medical Documentation. Digital signatures are sometimes needed to cryptographically bind a signature so that the receiving or consuming actor can verify authenticity, integrity, and rely on non-repudiation of the FHIR content.</p>
+<p>There are several digital signature methods including <a href="https://datatracker.ietf.org/doc/html/rfc5652">CMS</a>, <a href="https://tools.ietf.org/html/rfc7515">JWS</a>, and <a href="https://www.w3.org/TR/xmldsig-core/">XMLDSig</a>, and these methods have many options and choices.  In order to provide implementations with the capabilities needed to enable the set of local policies that are needed, implementation guides are required to define specifically how signatures should be created when authoring FHIR content and what actions should be taken to establish full verification when checking signatures.  The goal of this section is to provide implementations with the capabilities needed to make the actual signature verification process interoperable.</p>
+<p>This specification defines FHIR canonicalization methods and how to identify them.  It documents rules and guidelines on how to use the Signature data type for JWS, XML, and CMS signature methods and their profiles. It provides guidance for signing FHIR Bundles using the Provenance resource.</p>
 
 <a name="cautions"></a>
 <h2>Cautions around the use of digital signatures</h2>
@@ -713,3 +696,4 @@ This signature is valid.
 </body>
 
 </html>
+
