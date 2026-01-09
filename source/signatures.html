@@ -202,21 +202,22 @@ In addition, the following rules apply:
 <a name="variants"></a>
 <h3>Canonicalization Variants</h3>
 <p>
-The following additional canonicalization URIs are also defined for all three forms defined above:
+The following additional canonicalization URIs are also defined to allow systems the flexibility to sign the portions of the resource that matter for the workflow the signature serves. 
+Additional canonicalization methods may be defined by this or other specifications in the future.
 </p>
 <table class="grid">
  <tr>
-  <td>http://hl7.org/fhir/canonicalization/{fmt}#data</td>
+  <td>http://hl7.org/fhir/canonicalization/{fmt†}#data</td>
   <td>
-    Recursively omits all elements of type <a href="narrative.html#Narrative">Narrative</a>
+    Recursively* omits all elements of type <a href="narrative.html#Narrative">Narrative</a>
     (e.g. <code>Resource.text</code>, <code>Composition.section.text</code>, etc.) prior to signing
-    (note this removes the whole narrative element, not just the <code>div</code> element
+    (Note: this removes the whole narrative element, not just the <code>div</code> element
   </td>
  </tr>
  <tr>
-  <td>http://hl7.org/fhir/canonicalization/{fmt}#static</td>
+  <td>http://hl7.org/fhir/canonicalization/{fmt†}#static</td>
   <td>
-    Recursively omits all elements of type <a href="narrative.html#Narrative">Narrative</a>
+    Recursively* omits all elements of type <a href="narrative.html#Narrative">Narrative</a>
     (e.g. <code>Resource.text</code>, <code>Composition.section.text</code>, etc.) as per 
     <code>data</code> above,and also all occurrances of <code>Resource.meta</code>. This
     makes the signature robust as the content is moved from server to server, or workflow
@@ -226,36 +227,31 @@ The following additional canonicalization URIs are also defined for all three fo
   </td>
  </tr>
  <tr>
-  <td>http://hl7.org/fhir/canonicalization/{fmt}#narrative</td>
+  <td>http://hl7.org/fhir/canonicalization/{fmt†}#narrative</td>
   <td>
-    Recursively omits all elements other than <code>Resource.id</code> and elements with type
-    <a href="narrative.html#Narrative">Narrative</a>.  I.e. the only content retained is
-    resource identity and narrative.  NOTE: any bundle entries are removed, so narrative 
-    links are likely to be broken.
+    Recursively* omits all elements other than <code>Resource.id</code> and elements with type
+    <a href="narrative.html#Narrative">Narrative</a>.  I.e., the only content retained is
+    resource identity and narrative. When the goal of the digital signature includes human-level
+    non-repudiation, implementers should consider the resource narrative as the signed form. 
+    NOTE: any bundle entries are removed, so narrative links are likely to be broken, 
+    and the canonicalized resource might not be a 'valid' instance.
   </td>
  </tr>
  <tr>
-  <td>http://hl7.org/fhir/canonicalization/{fmt}#document</td>
+  <td>http://hl7.org/fhir/canonicalization/{fmt†}#document</td>
   <td>The Document <code>Bundle.id</code> and <code>Bundle.metadata</code> on the root Bundle are omitted prior to signing. This allows for a document to be copied from server to server</td>
  </tr>
 </table>
 <p>
-When excluding elements from signature, the elements on the path to reach the element must be
-included.  For example, if performing a 'narrative' canonicalization of a Bundle with a
-composition, if the Narrative elements <code>Composition.text</code> or <code>Composition.section.text exist</code>,
-then the <code>Bundle.entry</code>, <code>.resource</code> and <code>Composition.text</code> nodes
-needed to reach those elements would be retained.  The signed content might not be sufficient to
-constitute a 'valid' instance, but this is ok because the signature is focused only on what is attested to.
+* The process applies to all nested resources such as contained resources,
+Bundle entries, nested content in Parameters, etc.<br />
+† "json", "json-xml", or "xml" 
 </p>
 <p>
-Recursion means that the process applies to all nested resources such as contained resources,
-Bundle entries, nested content in Parameters, etc.  
-</p>
-<p>
-These canonicalization methods allow systems the flexibility to sign the various portions of 
-the resource that matter for the workflow the signature serves, per the discussion above. 
-This specification may define additional canonicalizations in the future, and other specifications
-might also define  additional canonicalization methods.
+When omitting elements during canonicalization, all the elements on the path to the retained elements must also be retained.
+For example, if performing a 'narrative' canonicalization of a Bundle with a composition, if the Narrative elements
+<code>Composition.text</code> or <code>Composition.section.text exist</code>, then the <code>Bundle.entry</code>, 
+ <code>.resource</code> and <code>Composition.text</code> nodes needed to reach those elements would be retained.
 </p>
 
 
@@ -653,6 +649,7 @@ This signature is valid.
 </body>
 
 </html>
+
 
 
 
