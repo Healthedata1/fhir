@@ -169,13 +169,13 @@ but this also requires administrative overhead.
 <li>When a provenance has multiple target resources that are signed, the resources are placed in a JSON Array preserving the Provenance.target order, which itself is canonicalized according to the rules of RFC 8785.</li>
 <li>If the resource is represented as XML at some point in the life cycle between signing and verification, see the JSON-XML canonicalization method below.</li>
 </ul>
-<p>The base JSON canonicalization method canonicalized the entire resource and is identified by the URI <code>http://hl7.org/fhir/canonicalization/json</code>.</p>
+<p>This base JSON canonicalization method canonicalized the entire resource and is identified by the URI <code>http://hl7.org/fhir/canonicalization/json</code>.</p>
 <p>Additional canonicalizations that include and exclude parts of the resource are defined below.</p>
 
 <a name="json-xml"></a>
 <h3>JSON-XML (XML Safe JSON Canonicalization)</h3>
 <p>The simple JSON Canonicalization defined above does not guarantee the reconstruction of a standard payload for signature verification if the resource is represented as XML at some point in the life cycle between signing and verification. This is because, in XML, XHTML elements (i.e., Resource and Section Narratives) are part of the XML DOM, and whitespace and namespaces may be reorganised without changing the canonical XHTML. Therefore, the JSON-XML method is defined. The rules for this canonicalization are the same as for the JSON canonicalization, except that prior to serialization, the content of any xhtml in the narrative SHALL be canonicalized according to the XML canonicalization rules defined for XML below.</p>
-<p>This base JSON-XML canonicalization method is identified by the URI <code>http://hl7.org/fhir/canonicalization/json-xml</code>.</p>
+<p>This base JSON-XML canonicalization method canonicalized the entire resource amd is identified by the URI <code>http://hl7.org/fhir/canonicalization/json-xml</code>.</p>
 <p>Additional canonicalizations that include and exclude parts of the resource are defined below.</p>
 
 <a name="xml"></a>
@@ -195,7 +195,7 @@ In addition, the following rules apply:
 <li>When sets of resources are signed, each resource gets its own <code>Reference</code> element inside the XML Digital Signature's <code>SignedInfo</code> element.</li>
 <li>When a provenance has multiple target resources that are signed, the multiple canonicalized XMLs are contained in the digital signature as separate signed content in the order in which the targets are defined.</li>
 </ul>
-<p>This canonicalization method is identified by the URI <code>http://hl7.org/fhir/canonicalization/xml</code>.</p>
+<p>This base XML canonicalization method canonicalized the entire resource and is identified by the URI <code>http://hl7.org/fhir/canonicalization/xml</code>.</p>
 <p>Additional canonicalizations that include and exclude parts of the resource are defined below.</p>
 
 
@@ -653,5 +653,6 @@ This signature is valid.
 </body>
 
 </html>
+
 
 
