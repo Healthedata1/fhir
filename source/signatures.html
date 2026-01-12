@@ -278,6 +278,34 @@ canonicalization method used. <strike>However, mixing formats may creates challe
 generally use JSON signatures with the JSON canonicalization in JSON resources, and XML signatures with the XML canonicalization in XML resources.</strike>
 </p>
 
+<a name="CMS"></a>
+<h3>CMS Signatures</h3>
+
+<p>When the digital signature is a <a href="https://datatracker.ietf.org/doc/html/rfc5652">RFC 5652: Cryptographic Message Syntax (CMS)</a> or a profile built upon it, such as <a href="https://www.etsi.org/deliver/etsi_ts/101700_101799/101733/01.17.01_60/ts_101733v011701p.pdf">CAdES (CMS Advanced Electronic Signature)</a>, the following guidelines and rules apply:</p>
+<ul>
+<li><code>Signature.type</code>: This element SHOULD be populated with the codes from <a href="https://hl7.org/fhir/6.0.0-ballot4/valueset-signature-type.html">Signature Type Codes</a>
+<ul>
+<li>The Purpose can be the action being attested to, or the role associated with the signature.</li>
+<li>It SHOULD agree with any &quot;purpose&quot; attribute in the CMS signature (for example, the &quot;commitment-type-indication&quot; attribute defined in the CadES profiles.)</li>
+</ul>
+</li>
+<li><code>Signature.when</code>: This element SHOULD be populated with the signature timestamp.
+<ul>
+<li>It SHOULD agree with the &quot;signingTime&quot; or &quot;signatureTimeStamp&quot; attributes in the CMS signature.</li>
+</ul>
+</li>
+<li><code>Signature.who</code>: This element SHOULD be populated with a  &lt;code&gt;Reference.reference&lt;/code&gt;  or &lt;code&gt;Reference.identifier&lt;/code&gt; of who signed the content.
+<ul>
+<li>It SHOULD match the signer's identity found in the digital certificate. (for example, the Subject Name (SN),
+or one of the Subject Alternative Names (SAN&gt;) in an X.509 certificate)</li>
+</ul>
+</li>
+<li><code>Signature.onBehalfOf</code>: When applicable, this element SHOULD be populated with a  &lt;code&gt;Reference.reference&lt;/code&gt;  or &lt;code&gt;Reference.identifier&lt;/code&gt; of the party represented by the signer.</li>
+<li><code>Signature.targetFormat</code>: This element SHOULD be populated, and the value SHOULD contain a canonicalization URL from one of those defined above or defined by other specifications.</li>
+<li><code>Signature.sigFormat</code>: This element SHOULD be populated. with the value &quot;application/pkcs7-signature&quot; for CMS and CMS profiles.</li>
+<li><code>Signature.data</code>: The base64 encoded DER or PEM formatted CMS signature.</li>
+</ul>
+
 <a name="JWS"></a>
 <h3>JWS Signatures</h3>
 
@@ -647,6 +675,7 @@ This signature is valid.
 </body>
 
 </html>
+
 
 
 
