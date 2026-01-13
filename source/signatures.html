@@ -268,13 +268,13 @@ and define new ones.
 <h3>Digital Signature Methods</h3>
 
 <p>
-This specification documents rules and guidelines on how to use the Signature data type for CMS, JWS, XML, signature methods and their profiles.
-<strike>Other signature methods can be used, and their use with FHIR can extrapolated from the content on this page.
-Note that [SMART Health Cards](https://hl7.org/fhir/uv/smart-health-cards-and-links/),is a W3C Verifiable Credentials Data Model and uses a JWS signature to secure it and it has been
+This specification documents rules and guidelines on how to use the Signature data type and Provenance elements for CMS, JWS, XML, signature methods, and their profiles.
+<strike>Other signature methods can be used, and their use with FHIR can be extrapolated from the content on this page.
+Note that [SMART Health Cards](https://hl7.org/fhir/uv/smart-health-cards-and-links/), is a W3C Verifiable Credentials Data Model and uses a JWS signature to secure it and it has been
 internationally adopted for secure, granular verification of health information such as COVID-19 immunizations and test results.</strike>
-Implementers should note that the CMS, JWS, XML, and other signature methods are agnostic to the content format and the choice of digital signature is independent of 
+Implementers should note that the CMS, JWS, XML, and other signature methods are agnostic to the content format, and the choice of digital signature is independent of 
 the format of the resource that contains the signature and the 
-canonicalization method used. <strike>However, mixing formats may creates challenges, and implementers SHOULD 
+canonicalization method used. <strike>However, mixing formats may create challenges, and implementers SHOULD 
 generally use JSON signatures with the JSON canonicalization in JSON resources, and XML signatures with the XML canonicalization in XML resources.</strike>
 </p>
 
@@ -376,9 +376,9 @@ When a provenance resource is used to carry a signature, the following rules app
   and SHOULD not be used</li>
  <li>If they are present, they SHALL agree with the values in the Provenance resource</li> 
  <li>
-  Since all digital signatures in the same provenance share the same signer, time, purpose etc, the primary use if 
-  multiple signatures is to include different media representations of the signature such as text and images as 
-  described above and if these are present, they should be signed by the digital signature(s).
+   Provenance can support multiple signatures. However, all digital signatures in the same Provenance share the same signer, time, purpose, etc.
+   Therefore, the primary use of multiple signatures in Provenance is to include different electronic signatures, such as an image and a digital signature,
+   that represent the same attestation. 
  </li>
 </ol>
 
@@ -678,6 +678,7 @@ This signature is valid.
 </body>
 
 </html>
+
 
 
 
