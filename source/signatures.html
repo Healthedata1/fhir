@@ -42,8 +42,8 @@ Outstanding issues:
 </ol>
 <h2>Digital Signature</h2>
 <p>FHIR Resources are often parts of a Medical Record or are communicated as part of formal Medical Documentation. Digital signatures are sometimes needed to cryptographically bind a signature so that the receiving or consuming actor can verify authenticity, integrity, and rely on non-repudiation of the FHIR content.</p>
-<p>There are several digital signature methods including <a href="https://datatracker.ietf.org/doc/html/rfc5652">CMS</a>, <a href="https://tools.ietf.org/html/rfc7515">JWS</a>, and <a href="https://www.w3.org/TR/xmldsig-core/">XMLDSig</a>, and these methods have many options and choices.  In order to provide implementations with the capabilities needed to enable the set of local policies that are needed, implementation guides are required to define specifically how signatures should be created when authoring FHIR content and what actions should be taken to establish full verification when checking signatures.  The goal of this section is to provide implementations with the capabilities needed to make the actual signature verification process interoperable.</p>
-<p>This specification defines FHIR canonicalization methods and how to identify them.  It documents rules and guidelines on how to use the Signature data type for JWS, XML, and CMS signature methods and their profiles. It provides guidance for signing FHIR Bundles using the Provenance resource.</p>
+<p>There are several digital signature methods including <a href="https://datatracker.ietf.org/doc/html/rfc5652">CMS</a>, <a href="https://tools.ietf.org/html/rfc7515">JWS</a>, and <a href="https://www.w3.org/TR/xmldsig-core/">XML Digital Signatures</a>, and these methods have many options and choices.  In order to provide implementations with the capabilities needed to enable the set of local policies that are needed, implementation guides are required to define specifically how signatures should be created when authoring FHIR content and what actions should be taken to establish full verification when checking signatures.  The goal of this section is to provide implementations with the capabilities needed to make the actual signature verification process interoperable.</p>
+<p>This specification defines FHIR canonicalization methods and how to identify them.  It documents rules and guidelines on how to use the Signature data type for CMS, JWS, and XML Digital Signature methods and their profiles. It provides guidance for signing FHIR Bundles using the Provenance resource.</p>
 
 <a name="cautions"></a>
 <h2>Cautions around the use of digital signatures</h2>
@@ -690,6 +690,7 @@ This signature is valid.
 </body>
 
 </html>
+
 
 
 
