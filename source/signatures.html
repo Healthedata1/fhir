@@ -384,40 +384,52 @@ When Provenance is used to carry a signature, the following rules apply:
 
 
 <a name="Bundles"></a>
-<h3>Signing Bundles</h3>
-<p>
-The most common use of signatures in FHIR is to sign a Document Bundle, and embed the signature inside the Bundle.
-In this approach, Documents are signed by Provenance resources contained within the document Bundle. Note that it 
-is not necessary to sign Bundles with embedded signatures like this - systems and/or ecosystems may choose to 
-use enveloping signatures (<a href="https://w3c.github.io/wot-ejs/">JSON</a>, <a href="https://www.w3.org/Signature/Drafts/WD-xmldsig-core-200005plc/Overview.html#sec-o-SignatureProperty">XML</a>), where the the signed data is included within the signature itself, 
-or make the Provenance resources avilable separately. However, if the signature is being embedded in the 
-Bundle, then the following rules SHALL be observed:
-</p>
-<ol>
- <li>Signatures SHALL be in a Provenance resource (there may be more than one such signature)</li>
- <li>The Provenance resources with these signatures SHALL be in entries in the Bundle</li>
- <li>The <code>Provenance.target</code> with a <code>reference</code> value of exactly <code>Bundle/[id]</code> 
-   where id is the id of the Bundle, such that the target identifies that the Bundle itself is being signed. Note that if 
-   the Provenance does not have a target of `Bundle/[id]` it does not represent an embedded signature, does not sign the Bundle, 
-   and is not subject to the rules documented here</li>
- <li>The Provenance resource SHALL have a <code>Provenance.signature</code> element that contains the signature of the Bundle,
-   with all entries that contain embedded signing provenance resources removed (that is, all entries that have a resource where the Provenance.targets includes
-   a reference to <code>Bundle/{id}</code></li>   
- <li>The Provenance resource is allowed to indicate that it signs additional resources, including the special target value <code>#</code>
-  which indicates that it signs itself in addition to the Bundle (but not including any Provenance.signature containing a digital signature). 
- </li>
- <li>Alternatively, the target might include the <code>fullUrl</code> of another entry in the Bundle, indicating that
-  this additional resource is also signed. Since the only entries that are not signed are other signatures, this is used 
-  to sign additional signatures. In such cases, the Provenance.signature is also signed. If the target is not in the Bundle,
-  this specification does not define how such references are resolved.
- </li>
-</ol>
 
-<p>
-Bundle resources include the <code>Bundle.signature</code>, element, but a number of issues with its use have been
-identified, and the element is deprecated. Applications SHOULD use the method described above to sign Bundles (which may be 
-pre-adopted when working with earlier versions of the FHIR specification).
+<h3>Signing Bundles</h3>
+
+<p>The most common use of signatures in FHIR is to sign a Document Bundle and include the signature as a Bundle entry. In this approach, Provenance is used to carry a signature, which is added to the Bundle as an entry before or after the signature is created. Implementers may choose to make the Provenance resources available separately, rather than as a bundle entry. However, if the signature is being included in the Bundle, then the following rules SHALL be observed:</p>
+
+<ol>
+<li>
+<p>Provenance is used to carry a signature</p>
+</li>
+<li>
+<p>&lt;code&gt;Provenance.target.reference&lt;/code&gt; = &quot;Bundle/[id]&quot; where id is the id of the Bundle. In other words, the Bundle itself is being signed.</p>
+</li>
+<li>
+<p>There can be other Provenance resources as entries in the Bundle that carry a signature. But if the &lt;code&gt;Provenance.target.reference&lt;/code&gt; != &quot;Bundle/[id]&quot; They are not embedded signatures, and not subject to the rules documented here</p>
+</li>
+<li>
+<p>The Provenance resource SHALL have a &lt;code&gt;Provenance.signature&lt;/code&gt; element for the Bundle signature.</p>
+</li>
+<li>
+<p>The Provenance resource is either:</p>
+<ol>
+<li>Added to the Bundle as a new entry after the signature is created.</li>
+<li>Removed before the signature is created, and updated and added back to the Bundle as a new entry after the signature is created.</li>
+<li>Signed as described below</li>
+</ol>
+</li>
+<li>
+<p><code>Provenance.target.reference</code> can reference other resources in addition to its Bundle contents.</p>
+<ol>
+<li>
+<p>To sign itself minus the <code>Provenance.signature.data</code> which holds the digital signature, the special target value &quot;#&quot; is used.</p>
+</li>
+<li>
+<p>To sign another Provenance signature entry in the Bundle, the target value target = &lt;code&gt;fullUrl&lt;/code&gt; of the other Provenance entry is used. In such cases, the <code>Provenance.signature.data</code> is also signed.</p>
+</li>
+<li>
+<p>The target may not be in the Bundle; however, this specification does not define how such references are resolved.</p>
+</li>
+</ol>
+</li>
+</ol>
+<blockquote class="ballot-note">
+<p
+The Bundle resource includes the <code>Bundle.signature</code>, element. Because of several unresolved issues with its use, the element is deprecated. Applications SHOULD use the method described above to sign Bundles and pre-adopt it when working with earlier versions of FHIR.
 </p>
+</blockquote>
 
 <a name="examples"></a>
 <h2>Worked Examples</h2>
@@ -678,6 +690,7 @@ This signature is valid.
 </body>
 
 </html>
+
 
 
 
