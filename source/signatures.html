@@ -338,28 +338,31 @@ or one of the Subject Alternative Names (SAN&gt;) in an X.509 certificate)</li>
 <a name="DigSig"></a>
 <h3>XML Digital Signatures</h3>
 
-<p>
-When the signature is an XML Digital Signature, the following rules apply:
-</p>
+<p>When the digital signature is an XML Signature Syntax and Processing (XML Digital Signature) (<a href="https://www.w3.org/TR/2002/REC-xmldsig-core-20020212/">Version 1.0</a>, <a href="https://www.w3.org/TR/xmldsig-core/">Version 1.1</a>, or <a href="https://www.w3.org/TR/xmldsig-core2/">Version 2.0</a>) or a profile built upon it, such as <a href="https://www.w3.org/TR/XAdES/">XAdES (XML Advanced Electronic Signature)</a>, the following guidelines and rules apply:</p>
 <ul>
-  <li>The Signature.data is base64 encoded XML Digital Signature as specified in <a href="https://www.w3.org/TR/xmldsig-core/">XML Signature Syntax and Processing Version 1.1</a></li>
-  <li>The value of Signature.sigFormat is <code>application/pkcs7-signature</code> and this SHOULD be populated</li>
-  <li>The <code>Signature.targetFormat</code> SHOULD be populated, and the value SHOULD contain a canonicalization URL from those defined above</li>
-  <li>The signature is a <a href="https://tools.ietf.org/html/rfc7515#appendix-F">Detached</a> Signature (where the content that is signed is separate from the signature itself)</li>
-  <li>When FHIR Resources are signed, the signature is across either the <a href="xml.html#canonical">Canonical XML form</a> or <a href="json.html#canonical">Canonical JSON form</a> 
-    of the resource(s) as indicated in the <code>targetFormat</code> element.</li>
-  <li>The Signature SHOULD include a "xades CommitmentTypeId" element for the Purpose(s) of Signature. 
-    The Purpose can be the action being attested to, or the role associated with the signature. The value shall come from ASTM E1762-95(2013). 
-    The Signature.type SHALL contain the same values as the srCms element.</li>
-  <li>The Signature SHOULD conform to <a href="https://www.w3.org/TR/XAdES/">XAdES-X-L</a> for support of <a href="https://www.w3.org/TR/XAdES/#Syntax_forXAdES-X-L_form">Long Term signatures</a>. The XAdES-X-L specification adds the timestamp of the signing, 
-       inclusion of the signing certificate, and statement of revocation.</li>
-  <li>Specifically, SignedSignatureProperties SHOULD have a <code>SigningTime</code> and the <code>Signature.when</code> SHOULD be populated, and if they are both populated, their values SHALL be equal</li>
-  <li>If a SignedSignatureProperties block is present, it SHOULD not have any whitespace between the elements</li>
-  <li>The Signature SHALL contain a <code>X509Certificate</code></li>
-  <li>The <code>Signature.who</code> SHOULD be populated, and if it is, it SHALL contain a value in either <code>Reference.reference</code> or <code>Reference.identifier</code>
-    that matches an identifier found in the X509 certificate (e.g., the <code>Subject</code>, or one of the Subject Alternative Names</li> 
-  <li>The Signature MAY conform to <a href="https://www.w3.org/TR/XAdES/#XML_Advanced_Electronic_Signature_Data_Structures_Contents_of_XAdES_T">XAdES-T</a> or any other profiling of XML-Signature.</li>
+<li><code>Signature.type</code> or <code>Provenance.agent.type</code>: This element SHOULD be populated with the codes from <a href="https://hl7.org/fhir/6.0.0-ballot4/valueset-signature-type.html">Signature Type Codes</a>
+<ul>
+<li>The Purpose can be the action being attested to, or the role associated with the signature.</li>
+<li>It SHOULD agree with any &quot;purpose&quot; element in the XML Digital Signature (for example, the &quot;CommitmentTypeId&quot; element defined in the XadES profiles.)</li>
 </ul>
+</li>
+<li><code>Signature.when</code> or <code>Provenance.agent.occurredDateTime</code>: This element SHOULD be populated with the signature timestamp.
+<ul>
+<li>It SHOULD agree with the &quot;signingTime&quot; element or &quot;signatureTimeStamp&quot; property in the XML Digital Signature.</li>
+</ul>
+</li>
+<li><code>Signature.who</code> or <code>Provenance.agent.who</code>: This element SHOULD be populated with a  &lt;code&gt;Reference.reference&lt;/code&gt;  or &lt;code&gt;Reference.identifier&lt;/code&gt; of who signed the content.
+<ul>
+<li>It SHOULD match the signer's identity found in the digital certificate. (for example, the Subject Name (SN),
+or one of the Subject Alternative Names (SAN&gt;) in an X.509 certificate)</li>
+</ul>
+</li>
+<li><code>Signature.onBehalfOf</code> or <code>Provenance.agent.onBehalfOf</code>: When applicable, this element SHOULD be populated with a  &lt;code&gt;Reference.reference&lt;/code&gt;  or &lt;code&gt;Reference.identifier&lt;/code&gt; of the party represented by the signer.</li>
+<li><code>Signature.targetFormat</code>: This element SHOULD be populated, and the value SHOULD contain a canonicalization URL from one of those defined above or defined by other specifications.</li>
+<li><code>Signature.sigFormat</code>: This element SHOULD be populated. with the value &quot;application/xml&quot; for XML Digital Signature and profiles.</li>
+<li><code>Signature.data</code>: The base64 encoded XML Digital Signature.</li>
+</ul>
+
 
 
 <a name="Provenance"></a>
@@ -675,6 +678,7 @@ This signature is valid.
 </body>
 
 </html>
+
 
 
 
