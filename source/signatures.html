@@ -294,13 +294,13 @@ generally use JSON signatures with the JSON canonicalization in JSON resources, 
 <li>It SHOULD agree with the &quot;signingTime&quot; or &quot;signatureTimeStamp&quot; attributes in the CMS signature.</li>
 </ul>
 </li>
-<li><code>Signature.who</code> or <code>Provenance.agent.who</code>: This element SHOULD be populated with a  &lt;code&gt;Reference.reference&lt;/code&gt;  or &lt;code&gt;Reference.identifier&lt;/code&gt; of who signed the content.
+<li><code>Signature.who</code> or <code>Provenance.agent.who</code>: This element SHOULD be populated with a  <code>Reference.reference</code>  or <code>Reference.identifier</code> of who signed the content.
 <ul>
 <li>It SHOULD match the signer's identity found in the digital certificate. (for example, the Subject Name (SN),
-or one of the Subject Alternative Names (SAN&gt;) in an X.509 certificate)</li>
+or one of the Subject Alternative Names (SAN>) in an X.509 certificate)</li>
 </ul>
 </li>
-<li><code>Signature.onBehalfOf</code> or <code>Provenance.agent.onBehalfOf</code>: When applicable, this element SHOULD be populated with a  &lt;code&gt;Reference.reference&lt;/code&gt;  or &lt;code&gt;Reference.identifier&lt;/code&gt; of the party represented by the signer.</li>
+<li><code>Signature.onBehalfOf</code> or <code>Provenance.agent.onBehalfOf</code>: When applicable, this element SHOULD be populated with a  <code>Reference.reference</code>  or <code>Reference.identifier</code> of the party represented by the signer.</li>
 <li><code>Signature.targetFormat</code>: This element SHOULD be populated, and the value SHOULD contain a canonicalization URL from one of those defined above or defined by other specifications.</li>
 <li><code>Signature.sigFormat</code>: This element SHOULD be populated. with the value &quot;application/pkcs7-signature&quot; for CMS and CMS profiles.</li>
 <li><code>Signature.data</code>: The base64 encoded DER or PEM formatted CMS signature.</li>
@@ -322,13 +322,13 @@ or one of the Subject Alternative Names (SAN&gt;) in an X.509 certificate)</li>
 <li>It SHOULD agree with any timestamp header in the JWS signature (for example, the &quot;iat&quot; or &quot;sigT&quot; headers defined in the JadES profiles.)</li>
 </ul>
 </li>
-<li><code>Signature.who</code> or <code>Provenance.agent.who</code>: This element SHOULD be populated with a  &lt;code&gt;Reference.reference&lt;/code&gt;  or &lt;code&gt;Reference.identifier&lt;/code&gt; of who signed the content.
+<li><code>Signature.who</code> or <code>Provenance.agent.who</code>: This element SHOULD be populated with a  <code>Reference.reference</code>  or <code>Reference.identifier</code> of who signed the content.
 <ul>
 <li>It SHOULD match the signer's identity found in the digital certificate. (for example, the Subject Name (SN),
-or one of the Subject Alternative Names (SAN&gt;) in an X.509 certificate)</li>
+or one of the Subject Alternative Names (SAN>) in an X.509 certificate)</li>
 </ul>
 </li>
-<li><code>Signature.onBehalfOf</code> or <code>Provenance.agent.inBehalfOfho</code>: When applicable, this element SHOULD be populated with a  &lt;code&gt;Reference.reference&lt;/code&gt;  or &lt;code&gt;Reference.identifier&lt;/code&gt; of the party represented by the signer.</li>
+<li><code>Signature.onBehalfOf</code> or <code>Provenance.agent.inBehalfOfho</code>: When applicable, this element SHOULD be populated with a  <code>Reference.reference</code>  or <code>Reference.identifier</code> of the party represented by the signer.</li>
 <li><code>Signature.targetFormat</code>: This element SHOULD be populated, and the value SHOULD contain a canonicalization URL from one of those defined above or defined by other specifications.</li>
 <li><code>Signature.sigFormat</code>: This element SHOULD be populated. with the value &quot;application/jose&quot; for JWS and JWS profiles.</li>
 <li><code>Signature.data</code>: The base64 encoded JWS.</li>
@@ -351,13 +351,13 @@ or one of the Subject Alternative Names (SAN&gt;) in an X.509 certificate)</li>
 <li>It SHOULD agree with the &quot;signingTime&quot; element or &quot;signatureTimeStamp&quot; property in the XML Digital Signature.</li>
 </ul>
 </li>
-<li><code>Signature.who</code> or <code>Provenance.agent.who</code>: This element SHOULD be populated with a  &lt;code&gt;Reference.reference&lt;/code&gt;  or &lt;code&gt;Reference.identifier&lt;/code&gt; of who signed the content.
+<li><code>Signature.who</code> or <code>Provenance.agent.who</code>: This element SHOULD be populated with a  <code>Reference.reference</code>  or <code>Reference.identifier</code> of who signed the content.
 <ul>
 <li>It SHOULD match the signer's identity found in the digital certificate. (for example, the Subject Name (SN),
-or one of the Subject Alternative Names (SAN&gt;) in an X.509 certificate)</li>
+or one of the Subject Alternative Names (SAN>) in an X.509 certificate)</li>
 </ul>
 </li>
-<li><code>Signature.onBehalfOf</code> or <code>Provenance.agent.onBehalfOf</code>: When applicable, this element SHOULD be populated with a  &lt;code&gt;Reference.reference&lt;/code&gt;  or &lt;code&gt;Reference.identifier&lt;/code&gt; of the party represented by the signer.</li>
+<li><code>Signature.onBehalfOf</code> or <code>Provenance.agent.onBehalfOf</code>: When applicable, this element SHOULD be populated with a  <code>Reference.reference</code>  or <code>Reference.identifier</code> of the party represented by the signer.</li>
 <li><code>Signature.targetFormat</code>: This element SHOULD be populated, and the value SHOULD contain a canonicalization URL from one of those defined above or defined by other specifications.</li>
 <li><code>Signature.sigFormat</code>: This element SHOULD be populated. with the value &quot;application/xml&quot; for XML Digital Signature and profiles.</li>
 <li><code>Signature.data</code>: The base64 encoded XML Digital Signature.</li>
@@ -394,13 +394,13 @@ When Provenance is used to carry a signature, the following rules apply:
 <p>Provenance is used to carry a signature</p>
 </li>
 <li>
-<p>&lt;code&gt;Provenance.target.reference&lt;/code&gt; = &quot;Bundle/[id]&quot; where id is the id of the Bundle. In other words, the Bundle itself is being signed.</p>
+<p><code>Provenance.target.reference</code> = &quot;Bundle/[id]&quot; where id is the id of the Bundle. In other words, the Bundle itself is being signed.</p>
 </li>
 <li>
-<p>There can be other Provenance resources as entries in the Bundle that carry a signature. But if the &lt;code&gt;Provenance.target.reference&lt;/code&gt; != &quot;Bundle/[id]&quot; They are not embedded signatures, and not subject to the rules documented here</p>
+<p>There can be other Provenance resources as entries in the Bundle that carry a signature. But if the <code>Provenance.target.reference</code> != &quot;Bundle/[id]&quot; They are not embedded signatures, and not subject to the rules documented here</p>
 </li>
 <li>
-<p>The Provenance resource SHALL have a &lt;code&gt;Provenance.signature&lt;/code&gt; element for the Bundle signature.</p>
+<p>The Provenance resource SHALL have a <code>Provenance.signature</code> element for the Bundle signature.</p>
 </li>
 <li>
 <p>The Provenance resource is either:</p>
@@ -417,7 +417,7 @@ When Provenance is used to carry a signature, the following rules apply:
 <p>To sign itself minus the <code>Provenance.signature.data</code> which holds the digital signature, the special target value &quot;#&quot; is used.</p>
 </li>
 <li>
-<p>To sign another Provenance signature entry in the Bundle, the target value target = &lt;code&gt;fullUrl&lt;/code&gt; of the other Provenance entry is used. In such cases, the <code>Provenance.signature.data</code> is also signed.</p>
+<p>To sign another Provenance signature entry in the Bundle, the target value target = <code>fullUrl</code> of the other Provenance entry is used. In such cases, the <code>Provenance.signature.data</code> is also signed.</p>
 </li>
 <li>
 <p>The target may not be in the Bundle; however, this specification does not define how such references are resolved.</p>
@@ -426,7 +426,7 @@ When Provenance is used to carry a signature, the following rules apply:
 </li>
 </ol>
 <blockquote class="ballot-note">
-<p
+<p>
 The Bundle resource includes the <code>Bundle.signature</code>, element. Because of several unresolved issues with its use, the element is deprecated. Applications SHOULD use the method described above to sign Bundles and pre-adopt it when working with earlier versions of FHIR.
 </p>
 </blockquote>
@@ -690,6 +690,7 @@ This signature is valid.
 </body>
 
 </html>
+
 
 
 
